@@ -9,12 +9,10 @@ exports.seed = function(knex) {
       return Promise.all([
 
         // Insert a single paper, return the paper ID, insert 2 footnotes
-        knex('users').insert({
-          api_key: '878uahfa8y89aydf89yas98fyas9h'
-        }, 'id')
-        .insert({
-          api_key: '2398qpncq28nrc8q7r987cq2987q8q'
-        }, 'id')
+        knex('users').insert([
+          { api_key: '878uahfa8y89aydf89yas98fyas9h'},
+          { api_key: '982q38uq9ur09quwnf0q45vw45vu0'}
+        ])
         .then(() => console.log('Seeding complete!'))
         .catch(error => console.log(`Error seeding data: ${error}`))
       ]) // end return Promise.all
