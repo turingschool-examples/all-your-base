@@ -6,6 +6,16 @@ exports.up = function(knex) {
       table.string('api_key');
 
       table.timestamps(true, true);
+    }),
+
+    knex.schema.createTable('favorites', function(table) {
+      table.increments('id').primary();
+      table.string('city');
+      table.integer('user_id').unsigned()
+      table.foreign('user_id')
+        .references('users.id');
+
+      table.timestamps(true, true);
     })
   ])
 };
@@ -13,6 +23,7 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return Promise.all([
-    knex.schema.dropTable('users')
+    knex.schema.dropTable('users'),
+    knex.schema.dropTable('favorites')
   ]);
 }
