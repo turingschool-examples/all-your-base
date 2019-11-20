@@ -43,54 +43,57 @@ rp(options).then(body => {
     };
 
     rp(options2).then(body2 => {
-                    var o = {} // empty Object
-                    var key = "location";
-                    o[key] = request.query.location; // empty Array, which you can push() values into
-                    var second_key = "currently"
-                    o[second_key] = body2.currently
-                    var third_key = "hourly"
-                    o[third_key] = body2.hourly
+      var json_response = {} // empty Object
+      json_response["location"] = request.query.location; // empty Array, which you can push() values into
+      json_response["currently"] = body2.currently
+      json_response["hourly"] = body2.hourly
+      json_response["daily"] = body2.daily
 
-                    var third_key = "daily"
-                    o[third_key] = body2.daily
-                    // console.log(body2)
+      delete json_response.currently.time
+      delete json_response.currently.nearestStormDistance
+      delete json_response.currently.nearestStormBearing
+      delete json_response.currently.apparentTemperature
+      delete json_response.currently.dewPoint
+      delete json_response.currently.uvIndex
+      delete json_response.currently.ozone
 
-                    // var data = {
-                    //     sampleTime: '1450632410296',
-                    //     data: '76.36731:3.4651554:0.5665419'
-                    // };
-                    // var data2 = {
-                    //     sampleTime: '1450632410296',
-                    //     data: '78.15431:0.5247617:-0.20050584'
-                    // };
-                    // o[key].push(data);
-                    // o[key].push(data2);
-                    // console.log(o)
-        response.status(200).json(o)
+      json_response.hourly.data.forEach((hash) => {
+        delete hash.precipType;
+        delete hash.apparentTemperature;
+        delete hash.dewPoint;
+        delete hash.uvIndex;
+        delete hash.ozone;
+      });
+
+      json_response.daily.data.forEach((hash) => {
+        delete hash.moonPhase;
+        delete hash.temperatureHighTime;
+        delete hash.temperatureLowTime;
+        delete hash.apparentTemperatureHigh;
+        delete hash.apparentTemperatureHighTime;
+        delete hash.apparentTemperatureLow;
+        delete hash.apparentTemperatureLowTime;
+        delete hash.dewPoint;
+        delete hash.windGustTime;
+        delete hash.windBearing;
+        delete hash.uvIndex;
+        delete hash.uvIndexTime;
+        delete hash.ozone;
+        delete hash.temperatureMinTime;
+        delete hash.temperatureMaxTime;
+        delete hash.apparentTemperatureMax;
+        delete hash.apparentTemperatureMaxTime;
+        delete hash.apparentTemperatureMin;
+        delete hash.apparentTemperatureMinTime;
+        delete hash.precipAccumulation;
+      });
+        response.status(200).json(json_response)
     }).catch(err => {
         console.log(err);
     });
 }).catch(err => {
     console.log(err);
 });
-
-// var options2 = {
-//     uri: `https://api.darksky.net/forecast/${process.env.DARK_SKY_API_KEY}/${latitude},${longitude}`,
-//     json: true // Automatically parses the JSON string in the response
-// };
-//
-// rp(options2).then(body => {
-//     console.log(body.results);
-// }).catch(err => {
-//     console.log(err);
-// });
-  // database('users').select()
-  //   .then((users) => {
-  //     response.status(200).json(users);
-  //   })
-  //   .catch((error) => {
-  //     response.status(500).json({ error });
-  //   });
 });
 
 module.exports = router;
