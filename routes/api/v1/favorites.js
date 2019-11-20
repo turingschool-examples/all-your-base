@@ -71,7 +71,52 @@ const createFavorite = router.post("/", (request, response) => {
     });
 });
 
+const deleteFavorite = router.delete("/", (request, response) => {
+  const favorite = request.body;
+  const userApiKey = favorite.api_key;
+  const location = favorite.location;
+  for (let requiredParameter of ["api_key", "location"]) {
+    if (!favorite[requiredParameter]) {
+      return response.status(422).send({
+        error: `Expected format: { api_key: <String>, location: <String> }. You're missing a "${requiredParameter}" property.`
+      });
+    }
+  }
+  database("users")
+    .where("api_key", userApiKey)
+    .then(user => {
+      if (user[0]) {
+        database("favorites")
+          .where("location", location)
+          .then(favorite => {
+            if (favorite[0]) {
+              database("favorites")
+                .del()
+                .where({ user_id: user[0].id, location: location })
+                .then(favorite => {
+                  response.status(204).json({
+                    message: `${location} has been removed from your favorites`
+                  });
+                })
+                .catch(error => {
+                  response.status(500).json({ error });
+                });
+            } else {
+              return response
+                .status(400)
+                .json({ message: `${location} is not in your favorites` });
+            }
+          });
+      } else {
+        return response
+          .status(401)
+          .json({ error: "Please supply a valid API key" });
+      }
+    });
+});
+
 module.exports = {
   showFavorites,
-  createFavorite
+  createFavorite,
+  deleteFavorite
 };
