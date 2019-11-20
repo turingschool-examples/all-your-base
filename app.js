@@ -21,7 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/api/v1/favorites", favoritesRouter.show);
+app.use("/api/v1/favorites", favoritesRouter.showFavorites);
+app.use("/api/v1/favorites", favoritesRouter.createFavorite);
 
 app.listen(app.get("port"), () => {
   console.log(`${app.locals.title} is running on ${app.get("port")}.`);
