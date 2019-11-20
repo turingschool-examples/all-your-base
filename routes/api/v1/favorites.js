@@ -13,11 +13,12 @@ const show = router.get("/", (request, response) => {
       if (user[0]) {
         database("favorites")
           .where("user_id", user[0].id)
+          .select("location")
           .then(favorites => {
             response.status(200).json(favorites);
           })
           .catch(error => {
-            response.status(401).json({ error });
+            response.status(500).json({ error });
           });
       } else {
         return response
