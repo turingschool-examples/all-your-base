@@ -10,17 +10,30 @@ router.get('/', (req, res) => {
   // get a user by api key
   findUser(req.body.api_key)
     .then(user => {
-      // console.log(user[0].id)
-      return(user[0].id)
+      if (user.length){
+        // retrieve an array of all user's favorite cities
+        favoriteCities(user)
+          .then(cities => {
+            console.log(cities)
+          })
+      }
     })
-  // retrieve all user's favorites
 });
 
 async function findUser(apiKey) {
   try {
     return await database('users').where({apiKey: apiKey});
-  } catch (error){
-    return error;
+  } catch(e){
+      return e;
+  }
+}
+
+async function favoriteCities(user) {
+  let userId = user[0].id
+  try{
+    return await database('favorites').where({user_id: userId})
+  }catch(e){
+    return e;
   }
 }
 
