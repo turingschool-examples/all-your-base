@@ -9,7 +9,7 @@ const database = require('knex')(configuration);
 router.get('/', (request, response) => {
   // if there's a valid api key
   const userApiKey = request.body.api_key;
-  database("users").where("api_key" === userApiKey)
+  database("users").where("api_key", userApiKey)
     .then(user => {
       if (user[0]) {
         database("favorites").select()
