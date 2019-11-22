@@ -8,8 +8,20 @@ const database = require('knex')(configuration);
 
 router.get('/', (request, response) => {
   // if there's a valid api key
-  database('favorites').select()
-    .then(res => response.status(200).json(res));
+  const userApiKey = request.body.api_key;
+  database("users").where("api_key" === userApiKey)
+    .then(user => {
+      if (user[0]) {
+        database("favorites").select()
+          .then(res => response.status(200).json(res))
+          .catch(error => {response.status(500).json({ error });
+        })
+        .catch(error => {response.status(500).json({ error });
+      });
+    } else {
+      return response.status(401).json({ error: "Invalid API Key" });
+    }
+  });
 });
 
 // router.post('/', (request, response) => {
