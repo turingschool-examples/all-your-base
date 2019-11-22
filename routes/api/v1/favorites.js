@@ -7,7 +7,6 @@ const database = require('knex')(configuration);
 
 
 router.get('/', (request, response) => {
-  // if there's a valid api key
   const userApiKey = request.body.api_key;
   database("users").where("api_key", userApiKey)
     .then(user => {
@@ -19,7 +18,7 @@ router.get('/', (request, response) => {
         .catch(error => {response.status(500).json({ error });
       });
     } else {
-      return response.status(401).json({ error: "Invalid API Key" });
+      return response.status(401).json({ error: "Unauthorized: missing or invalid API key" });
     }
   });
 });
