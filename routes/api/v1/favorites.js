@@ -67,7 +67,7 @@ const forecastFor = (cities) => {
     let coordinates = await getCoordinates(city.location)
       return {
           location: `${city.location}`,
-          forecast: await getForecast(coordinates)
+          current_weather: await getForecast(coordinates)
       }
   });
   return Promise.all(promises);
