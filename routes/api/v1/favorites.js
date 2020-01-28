@@ -1,11 +1,20 @@
 const express = require('express');
 const router  = express.Router();
-const favoritesController = require('../../../controllers/favorites_controller')
 
-router.get('/favorites', favoritesController.index);
 
-router.post('/favorites', favoritesController.create)
+router.get('/', (req, res) => {
+  res.send('respond with resource')
+});
 
-router.delete('/favorites', favoritesController.destroy)
 
-module.exports = router
+router.post('/', (req, res) => {
+  res.send('respond with resource')
+});
+
+
+router.delete('/', (req, res) => {
+  res.send('respond with resource')
+});
+
+
+module.exports = router;
