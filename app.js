@@ -29,4 +29,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 
+app.use('/api/v1/users', userRouter);
+
+app.use('/api/v1/forecast', forecastRouter);
+
+app.use('/api/v1/favorites', favoritesRouter);
+
+
 module.exports = app;
