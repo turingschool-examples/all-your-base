@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser');
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/api/v1/users');
-const forecastRouter = require('./routes/api/v1/forecast');
+const forecastRouter = require('./routes/api/v1/forecasts');
 const favoritesRouter = require('./routes/api/v1/favorites');
 
 app.use(bodyParser.json());
