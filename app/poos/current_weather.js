@@ -16,4 +16,21 @@ class CurrentWeather {
   }
 }
 
-module.exports = CurrentWeather; 
+module.exports = CurrentWeather;
+
+        // OR
+  // const currentWeather = (currentWeather) =>
+  //   ({
+  //     summary:  currentWeather.summary,
+  //     icon:  currentWeather.icon,
+  //     precipIntensity:  currentWeather.precipIntensity,
+  //     precipProbability:  currentWeather.precipProbability,
+  //     temperature:  currentWeather.temperature,
+  //     humidity:  currentWeather.humidity,
+  //     pressure:  currentWeather.pressure,
+  //     windSpeed:  currentWeather.windSpeed,
+  //     windGust:  currentWeather.windGust,
+  //     windBearing:  currentWeather.windBearing,
+  //     cloudCover:  currentWeather.cloudCover,
+  //     visibility:  currentWeather.visibility
+  //   })

@@ -7,3 +7,8 @@ class Favorite {
 }
 
 module.exports = Favorite;
+
+// const favorite = (favorite) =>
+//   ({
+//
+//   })
