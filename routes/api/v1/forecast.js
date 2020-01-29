@@ -41,9 +41,6 @@ router.get('/', (request, response) => {
         })
         .then((json) => {
 
-          // FORECAST RESULTS
-          let forecastData = json;
-
           // CURRENT WEATHER INFO
           let currentWeather = json.currently;
           // CLEAN UP THE CURRENT WEATHER INFO
@@ -67,6 +64,7 @@ router.get('/', (request, response) => {
             delete day.dewPoint;
             delete day.uvIndex;
             delete day.ozone;
+            return eightHourForecast;
           });
 
           // DAILY WEATHER INFO
@@ -96,13 +94,9 @@ router.get('/', (request, response) => {
             delete day.apparentTemperatureMinTime;
             delete day.apparentTemperatureMax;
             delete day.apparentTemperatureMaxTime;
+            return sevenDayForecast;
           });
-
-        // MAKE A FORECAST OBJECT TO BE RETURNED AND NOT LIKE YOU SEE BELOW
-        let forecastObject = `${currentWeather} ${hourlyWeatherSumamry} ${hourlyWeatherIcon} ${dailyWeatherSumamry} ${dailyWeatherIcon} ${dailyWeather}`;
-        console.log(forecastObject);
-        // let forecastJSON = forecastObject;
-          response.status(200).send("forecastJSON");
+          response.status(200).json({currently: currentWeather, hourly: {summary: hourlyWeatherSumamry, icon: hourlyWeatherIcon, data: eightHourForecast}, daily: {summary: dailyWeatherSumamry, icon: dailyWeatherIcon, data: sevenDayForecast}});
         });
       // END OF DARSKY API FETCHING
 
