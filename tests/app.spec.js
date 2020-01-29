@@ -16,6 +16,17 @@ describe('Test the root path', () => {
   });
 });
 
+describe('Test forecast endpoint', () => {
+  test('it should return forecast', async () => {
+    const res = await request(app)
+      .get('/api/v1/forecast')
+      .send({api_key: '123456789'})
+      .query({ location: 'denver,co'})
+
+    console.log(res)
+    expect(res.statusCode).toBe(200)
+  })
+})
 
 describe('users', () => {
   beforeEach(async () => {
