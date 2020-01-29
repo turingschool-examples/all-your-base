@@ -3,6 +3,12 @@ const router  = express.Router();
 const request = require('request')
 require('dotenv').config('/.env')
 
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('../../../knexfile')[environment];
+const database = require('knex')(configuration);
+
+
+
 router.get('/', (req, res) => {
   const location = req.query.location
 

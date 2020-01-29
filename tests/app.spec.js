@@ -33,14 +33,13 @@ describe('users', () => {
 
   describe('test users endpoint', () => {
     it('tests happy path', async () => {
-      const res = await request(app)
-        .get('/api/v1/users');
+      const res = await request(app).get('/api/v1/users');
 
       expect(res.statusCode).toBe(200);
       expect(res.body.length).toBe(1);
 
       expect(res.body[0]).toHaveProperty('email');
-      expect(res.body[0].email).toBe('foozzzbar@gmail.com');
+      expect(res.body[0].email).toBe('foobar@gmail.com');
 
       expect(res.body[0]).toHaveProperty('api_key');
       expect(res.body[0].api_key).toBe('123456897');
