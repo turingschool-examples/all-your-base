@@ -38,5 +38,9 @@ app.use('/api/v1/forecast', forecastRouter);
 
 app.use('/api/v1/favorites', favoritesRouter);
 
+app.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+});
+
 
 module.exports = app;

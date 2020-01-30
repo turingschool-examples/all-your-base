@@ -6,7 +6,6 @@ const environment = process.env.NODE_ENV || 'test';
 const configuration = require('../knexfile')[environment];
 const database = require('knex')(configuration);
 
-
 describe('Test the root path', () => {
   test('It should respond to the GET method', async () => {
     const res = await request(app)
@@ -17,14 +16,26 @@ describe('Test the root path', () => {
 });
 
 describe('Test forecast endpoint', () => {
+  beforeEach(async () => {
+    await database.raw('truncate table users cascade');
+
+    let user = {
+      email: 'foobar@gmail.com', api_key: '123456897'
+    };
+    await database('users').insert(user, 'id')
+  });
+
+  afterEach(() => {
+    database.raw('truncate table users cascade')
+  });
   test('it should return forecast', async () => {
     const res = await request(app)
       .get('/api/v1/forecast')
-      .send({api_key: '123456789'})
-      .query({ location: 'denver,co'})
+      .send({api_key: '123456897'})
+      .query({ location: 'denver,co'});
 
-    console.log(res)
-    expect(res.statusCode).toBe(200)
+      expect(res.status).toBe(200)
+
   })
 })
 

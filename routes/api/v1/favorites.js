@@ -9,10 +9,13 @@ const database = require('knex')(configuration);
 
 
 
-
-router.get('/', (req, res) => {
-  res.send('respond with resource')
-});
+//
+// router.get('/', (req, res) => {
+//   database('users').where('api_key', req.body.api_key).first()
+//     .then((user) => {
+//       if (user) {
+//   res.send('respond with resource')
+// });
 
 
 router.post('/', (req, res) => {

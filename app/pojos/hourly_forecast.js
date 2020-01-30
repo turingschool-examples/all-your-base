@@ -1,21 +1,21 @@
 class HourlyForecast {
 
   constructor(forecast){
-    this.summary = forecast.summary //?
-    this.icon = forecast.icon  //?
-    this.time = forecast.time
-    this.summary = forecast.summary
-    this.icon = forecast.icon
-    this.precipIntensity = forecast.precipIntensity
-    this.precipProbability = forecast.precipProbability
-    this.temperature = forecast.temperature
-    this.humidity = forecast.humidity
-    this.pressure = forecast.pressure
-    this.windSpeed = forecast.windSpeed
-    this.windGust = forecast.windGust
-    this.windBearing = forecast.windBearing
-    this.cloudCover = forecast.cloudCover
-    this.visibility = forecast.visibility
+    this.summary = forecast.hourly.summary //?
+    this.icon = forecast.hourly.icon  //?
+    this.time = forecast.hourly.data[0].time
+    this.summary = forecast.hourly.data[0].summary
+    this.icon = forecast.hourly.data[0].icon
+    this.precipIntensity = forecast.hourly.data[0].precipIntensity
+    this.precipProbability = forecast.hourly.data[0].precipProbability
+    this.temperature = forecast.hourly.data[0].temperature
+    this.humidity = forecast.hourly.data[0].humidity
+    this.pressure = forecast.hourly.data[0].pressure
+    this.windSpeed = forecast.hourly.data[0].windSpeed
+    this.windGust = forecast.hourly.data[0].windGust
+    this.windBearing = forecast.hourly.data[0].windBearing
+    this.cloudCover = forecast.hourly.data[0].cloudCover
+    this.visibility = forecast.hourly.data[0].visibility
   }
 }
 

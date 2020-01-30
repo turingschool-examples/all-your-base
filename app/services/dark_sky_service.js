@@ -16,6 +16,5 @@ class DarkSkyService {
 
   static getJSON(coordinate) {
     response = connection(coordinate)
-    JSON.parse(response.body, symbolize_names: true)
   }
 }

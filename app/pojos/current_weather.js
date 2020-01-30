@@ -1,18 +1,18 @@
 class CurrentWeather {
 
   constructor(response){
-    this.summary = response.summary
-    this.icon = response.icon
-    this.precipIntensity = response.precipIntensity
-    this.precipProbability = response.precipProbability
-    this.temperature = response.temperature
-    this.humidity = response.humidity
-    this.pressure = response.pressure
-    this.windSpeed = response.windSpeed
-    this.windGust = response.windGust
-    this.windBearing = response.windBearing
-    this.cloudCover = response.cloudCover
-    this.visibility = response.visibility
+    this.summary = response.currently.summary
+    this.icon = response.currently.icon
+    this.precipIntensity = response.currently.precipIntensity
+    this.precipProbability = response.currently.precipProbability
+    this.temperature = response.currently.temperature
+    this.humidity = response.currently.humidity
+    this.pressure = response.currently.pressure
+    this.windSpeed = response.currently.windSpeed
+    this.windGust = response.currently.windGust
+    this.windBearing = response.currently.windBearing
+    this.cloudCover = response.currently.cloudCover
+    this.visibility = response.currently.visibility
   }
 }
 
