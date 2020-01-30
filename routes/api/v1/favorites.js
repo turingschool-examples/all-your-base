@@ -26,8 +26,8 @@ router.get('/', (req, res) => {
           })
           async function getFavorites() {
             let faves = await locations.map(async (location) => {
-              let service =  await ForecastService.getFavoriteForecast(location)
-              return service
+              let each_fave =  await ForecastService.getFavoriteForecast(location)
+              return each_fave
             })
             Promise.all(faves)
               .then((fave_promises) => {
