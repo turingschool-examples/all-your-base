@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(401).json({error_message: error});
+      res.status(401).json({error_message: 'Unauthorized request'});
     })
 });
 
