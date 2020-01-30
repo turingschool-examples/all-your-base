@@ -1,4 +1,5 @@
 const dotenv = require('dotenv').config();
+// let googleService = require("../../../services/google_service");
 
 var express = require('express');
 var router = express.Router();
@@ -14,9 +15,11 @@ router.get('/', (request, response) => {
     .then((user) => {
       if (user) {
       // UNCOMMENT THE BELOW LINE OF CODE WHEN THE HELPER METHOD IS WORKING AGAIN
-        // let searchedLatAndLong = googleService(request.query.location);
+      // let googleSearch = new GoogleService(request.query.location);
+        // let searchedLatAndLong = googleService.lattitudeAndLong(request.query.location);
+        // console.log(`THIS IS WHAT THE GOOGLE SERVICE RETURNS: ${searchedLatAndLong}`);
 
-        // REMOVE THIS CODE WHEN THE HELPER METHOD IS WORKING
+        // REMOVE THIS CODE WHEN THE SERVICE METHODS ARE WORKING
         console.log(request.query.location);
         const location  = request.query.location;
         const googleApiKey = process.env.GOOGLE_API_KEY;
