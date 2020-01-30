@@ -15,10 +15,9 @@ router.get('/', (request, response) => {
   database('users').where('api_key', request.body.api_key).first()
     .then((user) => {
       if (user) {
-      // UNCOMMENT THE BELOW LINE OF CODE WHEN THE HELPER METHOD IS WORKING AGAIN
-      // let googleSearch = new GoogleService(request.query.location);
-        // let searchedLatAndLong = googleService.lattitudeAndLong(request.query.location);
-        // console.log(`THIS IS WHAT THE GOOGLE SERVICE RETURNS: ${searchedLatAndLong}`);
+
+        // ADD THE GOOGLE SERVICE HELPER METHOD HERE
+
 
         // REMOVE THIS CODE WHEN THE SERVICE METHODS ARE WORKING
         console.log(request.query.location);
