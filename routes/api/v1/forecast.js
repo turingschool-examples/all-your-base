@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var fetch = require("node-fetch");
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('../../../knexfile')[environment];
@@ -31,7 +32,18 @@ router.get('/', (request, response) => {
   })
 
   const location = request.query.location
-  
+
+  fetch(`https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_API_KEY}&address=${location}`)
+    .then(response => response.json())
+    .then(result => {
+      let coords = result.results[0].geometry.location
+      fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${coords.lat},${coords.lng}`)
+        .then(response => response.json())
+        .then(result => {
+          let current = result.currently
+        })
+    })
+    .catch((error) => console.error({ error }))
 });
 
 module.exports = router;
