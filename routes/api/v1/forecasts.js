@@ -1,3 +1,5 @@
+var ForecastFacade = require('../../../lib/facades/forecast_facade')
+
 var express = require('express');
 var router = express.Router();
 
@@ -11,7 +13,7 @@ router.get('/', (request, response) => {
   database('users').where({ apiKey: request.body.apiKey }).select().first()
     .then((user) => {
       if (user) {
-        response.status(200).json(user);
+        response.status(200).json(new ForecastFacade(request.query.location));
       }
       else {
         response.status(401).json({ message: 'unauthorized'}); 
