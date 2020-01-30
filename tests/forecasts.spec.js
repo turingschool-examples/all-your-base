@@ -44,7 +44,7 @@ describe('Test the forecast path', () => {
       expect(res.body.currently).toHaveProperty('windBearing')
       expect(res.body.currently).toHaveProperty('cloudCover')
       expect(res.body.currently).toHaveProperty('visibility')
-      
+
       expect(res.body).toHaveProperty('hourly')
       expect(res.body.hourly).toHaveProperty('summary')
       expect(res.body.hourly).toHaveProperty('icon')
@@ -83,7 +83,6 @@ describe('Test the forecast path', () => {
       expect(res.body.daily.data[0]).toHaveProperty('pressure')
       expect(res.body.daily.data[0]).toHaveProperty('windSpeed')
       expect(res.body.daily.data[0]).toHaveProperty('windGust')
-      expect(res.body.daily.data[0]).toHaveProperty('windBearing')
       expect(res.body.daily.data[0]).toHaveProperty('cloudCover')
       expect(res.body.daily.data[0]).toHaveProperty('visibility')
       expect(res.body.daily.data[0]).toHaveProperty('temperatureMin')
