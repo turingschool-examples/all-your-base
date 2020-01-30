@@ -1,3 +1,5 @@
+const CurrentWeather = require('./current_weather')
+
 class Favorite {
 
   constructor(forecast, location){

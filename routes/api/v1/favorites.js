@@ -22,12 +22,20 @@ router.get('/', (req, res) => {
           console.log(favorites)
           let locations = []
           favorites.forEach((favorite) => {
-            locations.push(favorites.location)
+            locations.push(favorite.location)
           })
           async function getFavorites() {
-            faves = await locations.map(location => ForecastService.getFavoriteForecast(location))
-            res.status(200).json(faves);
+            let faves = await locations.map(async (location) => {
+              let service =  await ForecastService.getFavoriteForecast(location)
+              return service
+            })
+            Promise.all(faves)
+              .then((fave_promises) => {
+                console.log(fave_promises)
+                res.status(200).json(fave_promises);
+              })
           }
+          getFavorites()
         })
         .catch((error) => {
           res.status(500).json({error_message: error});

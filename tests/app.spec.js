@@ -47,9 +47,12 @@ describe('Test favorite endpoint', () => {
       email: 'foobar@gmail.com', api_key: '123456897'
     };
     await database('users').insert(user, 'id')
-    await database('favorites').insert({location: 'denver,co', user_id: user.id})
-    let favorites = await database('favorites').where({user_id: user.id}).select()
-    console.log(favorites)
+    let favorite1 = {
+      location: 'denver,co', user_id: user.id };
+    let favorite2 = {
+      location: 'new york, ny', user_id: user.id };
+    await database('favorites').insert(favorite1, 'id')
+    await database('favorites').insert(favorite2, 'id')
   });
   afterEach(() => {
     database.raw('truncate table users cascade')
