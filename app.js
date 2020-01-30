@@ -2,12 +2,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var dotenv = require('dotenv').config()
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/api/v1/users');
+var forecastRouter = require('./routes/api/v1/forecast');
+var favoritesRouter = require('./routes/api/v1/favorites');
 
 var app = express();
 
@@ -18,6 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/forecast', forecastRouter);
+app.use('/api/v1/favorites', favoritesRouter);
 
 module.exports = app;
