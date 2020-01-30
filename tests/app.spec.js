@@ -39,6 +39,30 @@ describe('Test forecast endpoint', () => {
   })
 })
 
+describe('Test favorite endpoint', () => {
+  beforeEach(async () => {
+    await database.raw('truncate table users cascade');
+
+    let user = {
+      email: 'foobar@gmail.com', api_key: '123456897'
+    };
+    await database('users').insert(user, 'id')
+    await database('favorites').insert({location: 'denver,co', user_id: user.id})
+    let favorites = await database('favorites').where({user_id: user.id}).select()
+    console.log(favorites)
+  });
+  afterEach(() => {
+    database.raw('truncate table users cascade')
+  });
+  test('it should return favorite', async () => {
+    const res = await request(app)
+      .get('/api/v1/favorites')
+      .send({api_key: '123456897'})
+
+      expect(res.status).toBe(200)
+  })
+})
+
 describe('users', () => {
   beforeEach(async () => {
     await database.raw('truncate table users cascade');

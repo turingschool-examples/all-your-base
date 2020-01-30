@@ -1,8 +1,8 @@
 class Favorite {
 
-  constructor(response){
-    this.location = response.location
-    this.current_weather = new CurrentWeather(response)
+  constructor(forecast, location){
+    this.location = location.location
+    this.current_weather = new CurrentWeather(forecast)
   }
 }
 

@@ -1,8 +1,8 @@
 class Coordinate {
 
-  constructor(json){
-    this.lat = json.results[0].geometry.location.lat
-    this.lng = json.results[0].geometry.location.lat
+  constructor(response){
+    this.lat = response.results[0].geometry.location.lat
+    this.lng = response.results[0].geometry.location.lat
   }
 }
 
