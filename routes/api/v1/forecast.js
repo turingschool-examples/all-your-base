@@ -10,6 +10,7 @@ const database = require('knex')(configuration);
 const fetch = require('node-fetch');
 
 router.get('/', (request, response) => {
+  if (request.body.api_key) {
 
   database('users').where('api_key', request.body.api_key).first()
     .then((user) => {
@@ -110,12 +111,10 @@ router.get('/', (request, response) => {
       } else {
         response.status(401).json({error: 'Unauthorized!'});
       }
-
-
-  }).catch(error => console.log(error));
-
-
-
+    }).catch(error => console.log(error));
+  } else {
+    response.status(400).json({error: 'Bad Request! Did you send in an Api Key?'});
+  }
 });
 
 // function getLatAndLng(request) {
