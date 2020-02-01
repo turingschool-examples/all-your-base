@@ -26,7 +26,7 @@ describe('Test the forecast path', () => {
       const res = await request(app)
         .get("/api/v1/forecast?location=denver,co")
         .send({
-          apiKey: 'asdf'
+          api_key: 'asdf'
         });
 
       expect(res.statusCode).toBe(200);
@@ -94,7 +94,7 @@ describe('Test the forecast path', () => {
       const res = await request(app)
         .get("/api/v1/forecast?location=denver,co")
         .send({
-          apiKey: 'fff'
+          api_key: 'fff'
         });
 
       expect(res.statusCode).toBe(401);

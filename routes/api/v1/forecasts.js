@@ -12,7 +12,7 @@ const database = require('knex')(configuration);
 
 router.get('/', (request, response) => {
   // request.query.location
-  database('users').where({ apiKey: request.body.apiKey }).select().first()
+  database('users').where({ apiKey: request.body.api_key }).select().first()
     .then((user) => {
       if (user) {
         validUserResponse(request, response)
