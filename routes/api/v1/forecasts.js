@@ -1,3 +1,5 @@
+var googleService  = require('../../../lib/services/google_service')
+var darkSkyService  = require('../../../lib/services/dark_sky_service')
 var ForecastFacade = require('../../../lib/facades/forecast_facade')
 
 var express = require('express');
@@ -13,15 +15,44 @@ router.get('/', (request, response) => {
   database('users').where({ apiKey: request.body.apiKey }).select().first()
     .then((user) => {
       if (user) {
-        response.status(200).json(new ForecastFacade(request.query.location));
+        validUserResponse(request, response)
       }
       else {
-        response.status(401).json({ message: 'unauthorized'}); 
+        invalidUserResponse(response);
       }
     })
     .catch((error) => {
       response.status(500).json({ error });
     });
 });
+
+async function validUserResponse(request, response) {
+  let googleResponse = await getGeocode(request.query.location);
+  if (googleResponse.results) {
+    let geoCoordinate = googleResponse.results[0].geometry.location;
+    let location = googleResponse.results[0].formatted_address;
+    let forecast = await darkSkyService.getWeather(geoCoordinate);
+    let facade   = new ForecastFacade(location, forecast)
+    response.status(200).json(facade);
+  } 
+  else {
+    response.status(422).json({ message: 'invalid or missing parameter' });
+  }
+  return response;
+}
+
+function invalidUserResponse(response) {
+  return response.status(401).json({ message: 'unauthorized'}); 
+}
+
+async function getGeocode(location) {
+  let googleResponse = new Promise((res, rej) => {
+    setTimeout(() => { 
+      res(googleService.getGeocode(location), 100000)
+    });
+  });
+
+  return (await googleResponse);
+}
 
 module.exports = router;

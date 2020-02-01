@@ -31,6 +31,7 @@ describe('Test the forecast path', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty('location')
+      expect(res.body.location).toBe('Denver, CO, USA')
       expect(res.body).toHaveProperty('currently')
       expect(res.body.currently).toHaveProperty('summary')
       expect(res.body.currently).toHaveProperty('icon')
