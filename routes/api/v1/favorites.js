@@ -11,7 +11,6 @@ const database = require('knex')(configuration);
 
 
 router.post('/', (request, response) => {
-  // request.query.location
   database('users').where({ apiKey: request.body.api_key }).select().first()
     .then((user) => {
       if (user) {
@@ -27,16 +26,28 @@ router.post('/', (request, response) => {
 });
 
 router.get('/', (request, response) => {
-  // request.query.location
   database('users').where({ apiKey: request.body.api_key }).select().first()
     .then((user) => {
       if (user) {
         validFavoriteResponse(request, response, user.id)
-        // let favorites = await database('favorites').where({ user_id: user.id }).select().first()
-        // // get the current weather for every favorite
-        // let favoriteWeathers = await createFavorites(favorites)
-        // // return array of these objects
-        // response.status(200).json(favoriteWeathers)
+      }
+      else {
+        invalidUserResponse(response);
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+  });
+
+router.delete('/', (request, response) => {
+  database('users').where({ apiKey: request.body.api_key }).select().first()
+    .then((user) => {
+      if (user) {
+        database('favorites').where({ user_id: user.id, location: request.body.location }).del()
+          .then(() => {
+            response.status(204).send()
+          });
       }
       else {
         invalidUserResponse(response);
