@@ -11,9 +11,7 @@ describe('Test the forecast path', () => {
   beforeEach(async () => {
     await database.raw('truncate table users cascade');
 
-    let user = {
-      apiKey: 'asdf'
-    };
+    let user = { apiKey: 'asdf' };
     await database('users').insert(user, 'id');
   });
 
