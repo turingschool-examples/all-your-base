@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var fetch = require("node-fetch");
+var Forecast = require('../../../pojos/forecast')
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('../../../knexfile')[environment];
 const database = require('knex')(configuration);
-
 
 router.get('/', (request, response) => {
   const apiKey = request.body
@@ -22,11 +22,9 @@ router.get('/', (request, response) => {
     .where('api_key', apiKey['api_key'])
     .select()
     .then(user => {
-      if (user.length) {
-        response.send(user)
-      } else {
+      if (user.length === 0) {
         response.status(404).json({
-          error: `Could not find user with api_key ${request.body.api_key}`
+          error: `Could not find user with given api_key.`
         })
       }
   })
@@ -40,10 +38,10 @@ router.get('/', (request, response) => {
       fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${coords.lat},${coords.lng}`)
         .then(response => response.json())
         .then(result => {
-          let current = result.currently
+          response.json(new Forecast(location, result))
         })
     })
-    .catch((error) => console.error({ error }))
+    .catch((error) => response.status(500).send({ error }))
 });
 
 module.exports = router;
