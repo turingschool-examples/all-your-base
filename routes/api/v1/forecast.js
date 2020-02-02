@@ -12,20 +12,15 @@ router.get('/', (request, response) => {
 
   for (let requiredParameter of ['api_key']) {
     if (!apiKey[requiredParameter]) {
-      return response
-      .status(422)
-      .send({ error: `Expected format: { apiKey: <String>}. You're missing a "${requiredParameter}" property.` })
+      return response.status(401).json({ error: `Unauthorized access` })
     }
   }
 
   database('users')
-    .where('api_key', apiKey['api_key'])
-    .select()
+    .where('api_key', apiKey['api_key']).select()
     .then(user => {
       if (user.length === 0) {
-        response.status(404).json({
-          error: `Could not find user with given api_key.`
-        })
+        response.status(401).json({ error: `Unauthorized access`})
       }
   })
 
