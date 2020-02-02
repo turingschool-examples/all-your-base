@@ -1,9 +1,9 @@
 var shell = require('shelljs');
 var request = require("supertest");
-var app = require('../app');
+var app = require('../../app');
 
 const environment = process.env.NODE_ENV || 'test';
-const configuration = require('../knexfile')[environment];
+const configuration = require('../../knexfile')[environment];
 const database = require('knex')(configuration);
 
 
@@ -11,9 +11,7 @@ describe('Test the forecast path', () => {
   beforeEach(async () => {
     await database.raw('truncate table users cascade');
 
-    let user = {
-      apiKey: 'asdf'
-    };
+    let user = { apiKey: 'asdf' };
     await database('users').insert(user, 'id');
   });
 
@@ -26,7 +24,7 @@ describe('Test the forecast path', () => {
       const res = await request(app)
         .get("/api/v1/forecast?location=denver,co")
         .send({
-          apiKey: 'asdf'
+          api_key: 'asdf'
         });
 
       expect(res.statusCode).toBe(200);
@@ -94,7 +92,7 @@ describe('Test the forecast path', () => {
       const res = await request(app)
         .get("/api/v1/forecast?location=denver,co")
         .send({
-          apiKey: 'fff'
+          api_key: 'fff'
         });
 
       expect(res.statusCode).toBe(401);
