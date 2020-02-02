@@ -58,7 +58,8 @@ router.post('/', (request, response) => {
 // steps
 // 1. validate user
 // 2. get location (lat, long from Geocode)
-// 3.
+// 3. add location to favorites table with user_id
+// 4. return success/error responses
 
 
 module.exports = router;
