@@ -7,12 +7,11 @@ const configuration = require('../../../knexfile')[environment];
 const database = require('knex')(configuration);
 
 
-describe('Test the forecast path', () => {
+describe('Test the favorites path', () => {
   beforeEach(async () => {
     await database.raw('truncate table users cascade');
-    await database.raw('truncate table favorites cascade');
 
-    let user = {
+    var user = {
       apiKey: 'asdf'
     };
     await database('users').insert(user, 'id');
@@ -20,10 +19,9 @@ describe('Test the forecast path', () => {
 
   afterEach(() => {
     database.raw('truncate table users cascade');
-    database.raw('truncate table favorites cascade');
   });
 
-  describe('test forecast GET', () => {
+  describe('test favorites creation', () => {
     it('happy path', async () => {
       const res = await request(app)
         .post("/api/v1/favorites")
@@ -32,11 +30,19 @@ describe('Test the forecast path', () => {
           api_key: 'asdf'
         });
 
-      expect((await database('favorites').select()).length()).toBe(1)
-
+      let user      = await database('users').select()
+      let favorites = await database('favorites').select()
+      expect(favorites.length).toBe(1);
+      
       expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty('message')
-      expect(res.body.location).toBe('Denver, CO has been added to your favorites')
+      expect(res.body).toHaveProperty('message');
+      expect(res.body.message).toBe('Denver, CO has been added to your favorites');
+
+      let addedFavorite = favorites[0]
+      expect(addedFavorite.user_id).toBe(user[0].id);
+      expect(addedFavorite.location).toBe('Denver, CO');
+      expect(addedFavorite.lat).toBe(38.7773);
+      expect(addedFavorite.lng).toBe(-90.4836);
     });
     
     it('sad path', async () => {
