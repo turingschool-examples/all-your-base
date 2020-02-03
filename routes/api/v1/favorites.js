@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var fetch = require("node-fetch");
+var Forecast = require('../../../pojos/forecast');
 
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('../../../knexfile')[environment];
@@ -13,8 +14,8 @@ router.get('/', (request, response) => {
   if (!apiKey) {
     return response.status(401).json({ error: `Unauthorized access` })
   }
-
-  // 2. Look up API key in the database
+  //
+  // // 2. Look up API key in the database
   database('users')
     .where('api_key', apiKey).first()
     .then(user => {
@@ -22,15 +23,21 @@ router.get('/', (request, response) => {
         response.status(401).json({ error: `Unauthorized access` })
       } else {
         database('favorites').where('user_id', user.id).select()
-          .then(favorite => {
-            let favArray = favorite
-            // favArray.map()
+          .then(favorites => {
+            const favoritesWeather = favorites.map(fav => {
+              return fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${fav.lat},${fav.lng}`)
+              .then(response => response.json())
+              .then(result => new Forecast(fav.location, result).currentWeather())
+              .catch(error => { response.status(500).json({error: console.log(error)}) })
+            })
           })
+          .catch(error => response.status(500).json({ error: console.log(error) }))
+        Promise.all(favoritesWeather)
+        .then(favArray => response.status(200).json(favArray))
+        .catch(error => response.status(500).json({error: console.log(error)}))
       }
-    }).catch(error => {
-      response.status(500).json({ error: `Couldn't add ${location} to favorites.` })
     })
-
+    .catch(error => response.status(500).json({ error: console.log(error) }))
 });
 
 router.post('/', (request, response) => {
