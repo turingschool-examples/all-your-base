@@ -24,17 +24,19 @@ router.get('/', (request, response) => {
       } else {
         database('favorites').where('user_id', user.id).select()
           .then(favorites => {
-            const favoritesWeather = favorites.map(fav => {
-              return fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${fav.lat},${fav.lng}`)
+            var favArray = favorites.map(fav => {
+              fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${fav.lat},${fav.lng}`)
               .then(response => response.json())
               .then(result => new Forecast(fav.location, result).currentWeather())
-              .catch(error => { response.status(500).json({error: console.log(error)}) })
+              // .catch(error => response.status(500).json({ error: console.log(error) }))
             })
+            Promise.all(favArray)
+            .then(results => {
+              console.log(results)
+              response.status(200).json(results)})
+            .catch(error => response.status(500).json({ error: console.log(error) }))
           })
-          .catch(error => response.status(500).json({ error: console.log(error) }))
-        Promise.all(favoritesWeather)
-        .then(favArray => response.status(200).json(favArray))
-        .catch(error => response.status(500).json({error: console.log(error)}))
+        .catch(error => response.status(500).json({ error: console.log(error) }))
       }
     })
     .catch(error => response.status(500).json({ error: console.log(error) }))
