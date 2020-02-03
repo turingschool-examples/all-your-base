@@ -8,6 +8,8 @@ const configuration = require('./knexfile')[environment];
 
 var indexRouter = require('./routes/index');
 var papersRouter = require('./routes/api/v1/papers');
+var forecastsRouter = require('./routes/api/v1/forecasts');
+var favoritesRouter = require('./routes/api/v1/favorites');
 
 var app = express();
 
@@ -19,5 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/v1/papers', papersRouter);
+app.use('/api/v1/forecast', forecastsRouter);
+app.use('/api/v1/favorites', favoritesRouter);
 
 module.exports = app;

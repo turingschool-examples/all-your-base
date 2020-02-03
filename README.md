@@ -1,74 +1,197 @@
-# All your Express base are belong to us
 
-[![Build Status](https://travis-ci.com/turingschool-examples/all-your-base.svg?branch=master)](https://travis-ci.com/turingschool-examples/all-your-base)
+# Sweater Weather
+A back-end api that exposes endpoints for the weather of a location, and the favorite location of users
 
-## Getting started
-To use this repo, you’ll need to `fork` the repo as your own. Once you have done that, you’ll need to run the following command below to get everything up and running. 
+## Tech/framework used
+<b>Built with</b>
+- Express
+- Node.js
+- PostgreSQL
 
-#### Installing necessary dependencies
-The easiest way to get started is to run the following command. This will pull down any necessary dependencies that your app will require. You can think of this command as something incredibly similar to `bundle install` in Rails. 
+Once these are installed, clone the repository to your local machine 
 
-`npm install`
-
-#### Set up your local database
-You’ll need to figure out a name for your database. We suggest calling it something like `sweater_weather_dev`.  
-
-To get things set up, you’ll need to access your Postgres instance by typing in `psql` into your terminal. Once there, you can create your database by running the comment `CREATE DATABASE PUT_DATABASE_NAME_HERE_dev;`. 
-
-Now you have a database for your new project.
-
-#### Migrations
-Once you have your database setup, you’ll need to run some migrations (if you have any). You can do this by running the following command: 
-
-`knex migrate:latest`
-
-
-Instructions to create database, run migrations, and seed: 
-```
-psql
-CREATE DATABASE DATABASE_NAME_dev;
-\q
-
-knex migrate:latest
-knex seed:run
+Once cloned onto your computer, `cd` into the project directory and run `npm install ` to install all required packages for the project.
+## API Reference
+All endpoints require the following headers:
+```json
+"Content-Type": "application/json",
+"Accept": "application/json"
 ```
 
-#### Set up your test database
-Most of the setup is going to be same as the one you did before. You’ll notice one small difference with setting the environment flag to `test`.  
+---
 
+### Forecast
+`GET /api/v1/forecast?location=<LOCATION>`
+
+This endpoint requires a body with the following format:
+```json
+{
+	"api_key": "<YOUR API KEY>"
+}
+
+Returns the current weather, the weather for the next 48 hours, and the weather for the next week. The user will get the following response:
+```json
+{
+    "location": "Denver, CO, USA",
+    "currently": {
+        "summary": "Clear",
+        "icon": "clear-night",
+        "precipIntensity": 0,
+        "precipProbability": 0,
+        "temperature": 49.57,
+        "humidity": 0.2,
+        "pressure": 998,
+        "windSpeed": 3.05,
+        "windGust": 10.35,
+        "windBearing": 178,
+        "cloudCover": 0.29,
+        "visibility": 10
+    },
+    "hourly": {
+        "summary": "Foggy tomorrow afternoon and evening.",
+        "icon": "snow",
+        "data": [
+            {
+                "time": 1580702400,
+                "summary": "Clear",
+                "icon": "clear-night",
+                "precipIntensity": 0,
+                "precipProbability": 0,
+                "temperature": 51.51,
+                "humidity": 0.19,
+                "pressure": 997.4,
+                "windSpeed": 3.95,
+                "windGust": 11.37,
+                "windBearing": 178,
+                "cloudCover": 0.22,
+                "visibility": 10
+            },
+        ]
+    },
+    "daily": {
+        "summary": "Possible light snow tomorrow.",
+        "icon": "snow",
+        "data": [
+            {
+                "sunriseTime": 1580652480,
+                "time": 1580626800,
+                "icon": "clear-day",
+                "summary": "Clear throughout the day.",
+                "sunsetTime": 1580689260,
+                "precipIntensity": 0.0002,
+                "precipIntensityMax": 0.002,
+                "precipIntensityMaxTime": 1580709540,
+                "precipProbability": 0.06,
+                "precipType": "rain",
+                "temperatureHigh": 74.6,
+                "temperatureLow": 29.46,
+                "humidity": 0.16,
+                "pressure": 1006.1,
+                "windSpeed": 6.86,
+                "windGust": 23.85,
+                "cloudCover": 0.19,
+                "visibility": 10,
+                "temperatureMin": 40.71,
+                "temperatureMax": 74.6
+            },
+        ]
+    }
+}
 ```
-psql
-CREATE DATABASE DATABASE_NAME_test;
-\q
 
-knex migrate:latest --env test
+---
+
+### User Favorite Creation
+`POST /api/v1/favorites`
+
+This endpoint requires a body with the following format:
+```json
+{
+	"location": "Denver, CO",
+	"api_key": "<YOUR API KEY>"
+}
+```
+If the registration is successful, the user will get the following response body:
+
+```json
+{
+    "message": "Boulder, CO has been added to your favorites"
+}
 ```
 
-## Running your tests
-Running tests are simple and require you to run the following command below: 
-
-`npm test`
-
-When the tests have completed, you’ll get a read out of how things panned out. The tests will be a bit more noisy than what you’re used to, so be prepared. 
-
-## Setting up your production environment
-This repo comes with a lot of things prepared for you. This includes production ready configuration. To get started, you’ll need to do a few things. 
-
-- Start a brand new app on the Heroku dashboard 
-- Add a Postgres instance to your new Heroku app
-- Find the URL of that same Postgres instance and copy it. It should look like a long url. It may look something like like `postgres://sdflkjsdflksdf:9d3367042c8739f3...`.
-- Update your `knexfile.js` file to use your Heroku database instance. You’ll see a key of `connection` with a value of an empty string. This is where you’ll paste your new Postgres instance URL. 
-
-Once you’ve set all of that up, you’ll need to `add the remote` to your new app. This should work no differently than how you’ve done it with any Rails project. Adding this remote will allow you to run `git push heroku master`. 
-
-Once you’ve done that, you’ll need to `bash` into your Heroku instance and get some things set up. 
-
-- Run the following commands to get started:
-```
-heroku run bash
-npm install
-nom install -g knex
-knex migrate:latest
+An unsuccessful registration will return a response stating the reason in the folloiwng format:
+```json
+{
+  "message": "Unauthorized"
+}
 ```
 
-This will install any dependencies, install Knex, and migrate any changes that you’ve made to the database. 
+---
+
+### User Favorite List
+`POST /api/v1/favorites`
+
+This endpoint requires a body with the following format:
+```json
+{
+	"api_key": "<YOUR API KEY"
+}
+```
+
+A successful response will look like the following:
+
+```json
+[
+    {
+        "location": "Denver, CO",
+        "current_weather": {
+            "summary": "Mostly Cloudy",
+            "icon": "partly-cloudy-night",
+            "precipIntensity": 0,
+            "precipProbability": 0,
+            "temperature": 45.22,
+            "humidity": 0.81,
+            "pressure": 1007.6,
+            "windSpeed": 1.31,
+            "windGust": 3.52,
+            "windBearing": 278,
+            "cloudCover": 0.61,
+            "visibility": 10
+        }
+    },
+    {
+        "location": "Boulder, CO",
+        "current_weather": {
+            "summary": "Mostly Cloudy",
+            "icon": "partly-cloudy-night",
+            "precipIntensity": 0,
+            "precipProbability": 0,
+            "temperature": 45.22,
+            "humidity": 0.81,
+            "pressure": 1007.6,
+            "windSpeed": 1.31,
+            "windGust": 3.52,
+            "windBearing": 278,
+            "cloudCover": 0.61,
+            "visibility": 10
+        }
+    }
+]
+```
+
+---
+
+### User Favorite Deletion
+`DELETE /api/v1/favorites`
+
+This endpoint requires a body with the following format:
+```json
+{
+	"location": "Boulder, CO",
+	"api_key": "<YOUR API KEY>"
+}
+```
+
+A successful response will return a 204 status code.
+
+---
